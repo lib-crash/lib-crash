@@ -9,7 +9,7 @@ Yellow='\033[0;33m'
 Purple='\033[0;35m'
 
 function err() {
-    echo -e "[${Red}error${Reset}] $1"
+    echo -e "[${Red}error${Reset}] $1" >&2
 }
 
 function log() {
