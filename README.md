@@ -5,10 +5,17 @@ A crappy bash library
 
 ## Installation
 
+### Automatic one liner
+Get latest library from github.
+```
+curl -sSL https://git.io/Jegtg | bash
+```
+### Alternative: clone and install manually
+Use this method if you want to uninstall or modify the library.
 ```
 git clone https://github.com/lib-crash/lib-crash
 cd lib-crash
-./install.sh
+./install.sh local
 ```
 
 ## Example
