@@ -22,7 +22,7 @@ if [ "$LIB_CRASH_VERSION" == "$current_version" ]
 then
     log "lib-crash is already latest version '$current_version'"
     log "to force a update uninstall first:"
-    echo "$0 uninstall"
+    echo "./install.sh uninstall"
     exit 0
 fi
 
