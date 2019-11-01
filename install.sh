@@ -18,8 +18,7 @@ function log() {
 }
 
 read -rd '' crash_include << EOF
-# shellcheck shell=bash
-# shellcheck source=/dev/null
+# lib-crash start
 function crash_include() {
     if [ "\$#" -lt 1 ]
     then
@@ -48,15 +47,19 @@ function crash_include() {
 
     . "\$lib_path/\$file"
 }
-export -f crash_include >> /tmp/lib-crash-err 2>&1
+export -f crash_include
+# lib-crash end
 EOF
 
 arg_method=${1:-local}
 arg_path=${2:-/usr/lib/lib-crash}
 bash_file=""
-if [ -d /etc/profile.d/ ]
+if [ -f /etc/bash.bashrc ] # debian
 then
-    bash_file=/etc/profile.d/lib-crash.sh
+    bash_file=/etc/bash.bashrc
+elif [ -f /etc/bashrc ] # redhat
+then
+    bash_file=/etc/bashrc
 else
     log "install failed: unsupported os"
     exit 1
@@ -73,13 +76,9 @@ function pre_install() {
             exit 1
         fi
     fi
-    if [ -f "$bash_file" ]
-    then
-        # make sure to never delete/overwrite something
-        log "install failed: '$bash_file' exist already"
-        exit 1
-    fi
-    echo "$crash_include" > "$bash_file" || exit 1
+    # insert at start of file before any return
+    echo "$crash_include" | cat - "$bash_file" > /tmp/lib-crash-bashrc || exit 1
+    mv /tmp/lib-crash-bashrc "$bash_file" || exit 1
 }
 
 if [ "$arg_method" == "local" ]
@@ -93,7 +92,8 @@ then
 elif [ "$arg_method" == "uninstall" ]
 then
     rm -r "$arg_path" || exit 1
-    rm "$bash_file" || exit 1
+    sed '/# lib-crash start/,/# lib-crash end/d' "$bash_file" > /tmp/lib-crash-bashrc || exit 1
+    cp /tmp/lib-crash-bashrc "$bash_file" || exit 1
     log "successfully uninstalled lib-crash"
 else
     log "invalid argument '$arg_method' visit help page"
