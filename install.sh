@@ -17,6 +17,15 @@ function log() {
     echo "[lib-crash] $1"
 }
 
+current_version="v1.0.0"
+if [ "$LIB_CRASH_VERSION" == "$current_version" ]
+then
+    log "lib-crash is already latest version '$current_version'"
+    log "to force a update uninstall first:"
+    echo "$0 uninstall"
+    exit 0
+fi
+
 read -rd '' crash_include << EOF
 # lib-crash start
 function crash_include() {
@@ -48,7 +57,7 @@ function crash_include() {
     . "\$lib_path/\$file"
 }
 export -f crash_include
-export LIB_CRASH_VERSION="v1.0.0"
+export LIB_CRASH_VERSION="$current_version"
 # lib-crash end
 EOF
 
