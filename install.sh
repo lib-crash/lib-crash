@@ -48,6 +48,7 @@ function crash_include() {
     . "\$lib_path/\$file"
 }
 export -f crash_include
+export LIB_CRASH_VERSION="v1.0.0"
 # lib-crash end
 EOF
 
