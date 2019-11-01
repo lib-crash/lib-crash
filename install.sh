@@ -76,6 +76,10 @@ function pre_install() {
             exit 1
         fi
     fi
+    if grep -q "# lib-crash start" "$bash_file"
+    then
+        return
+    fi
     # insert at start of file before any return
     echo "$crash_include" | cat - "$bash_file" > /tmp/lib-crash-bashrc || exit 1
     mv /tmp/lib-crash-bashrc "$bash_file" || exit 1
