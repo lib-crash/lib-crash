@@ -18,7 +18,7 @@ function log() {
 }
 
 
-arg_method=${1:-local}
+arg_method=${1:-github}
 arg_path=${2:-$HOME/.lib-crash/lib-crash/lib-crash}
 
 if [ "$arg_method" == "local" ] && [ -f "$arg_path/init.sh" ]
